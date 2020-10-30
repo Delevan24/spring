@@ -67,16 +67,16 @@ import org.springframework.util.StringUtils;
  * @see #registerDisposableBean
  * @see org.springframework.beans.factory.DisposableBean
  * @see org.springframework.beans.factory.config.ConfigurableBeanFactory
- */
+ */ // 只有单例的bean会通过三级缓存提前暴露来解决循环依赖的问题,而非单例的bean ,每次从容器中获取都是新的对象,都会重新创建,所以非单例的bean是没有缓存的,不会将其放到三级缓存中
 public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements SingletonBeanRegistry {
 
-	/** Cache of singleton objects: bean name to bean instance. */
+	/** Cache of singleton objects: bean name to bean instance. */ // 第一级缓存(也叫单例池) singletonObjects 存放已经经历了完整生命周期的bean对象
 	private final Map<String, Object> singletonObjects = new ConcurrentHashMap<>(256);
 
-	/** Cache of singleton factories: bean name to ObjectFactory. */
+	/** Cache of singleton factories: bean name to ObjectFactory. */ // 第三级缓存 存放可以生成Bean的生厂
 	private final Map<String, ObjectFactory<?>> singletonFactories = new HashMap<>(16);
 
-	/** Cache of early singleton objects: bean name to bean instance. */
+	/** Cache of early singleton objects: bean name to bean instance. */  // 第二级缓存 存放早起暴露出来的Bean对象, Bean的生命周期还未结束(属性还未填充完成)
 	private final Map<String, Object> earlySingletonObjects = new HashMap<>(16);
 
 	/** Set of registered singletons, containing the bean names in registration order. */

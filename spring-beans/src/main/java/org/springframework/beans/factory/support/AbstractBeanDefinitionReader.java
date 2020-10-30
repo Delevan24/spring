@@ -182,9 +182,13 @@ public abstract class AbstractBeanDefinitionReader implements BeanDefinitionRead
 
 	@Override
 	public int loadBeanDefinitions(Resource... resources) throws BeanDefinitionStoreException {
+		// 上面虽然有两个分支，不过第二个分支很快通过解析路径转换为 Resource 以后也会进到这里
 		Assert.notNull(resources, "Resource array must not be null");
 		int count = 0;
+
+		// 注意这里是个 for 循环，也就是每个文件是一个 resource
 		for (Resource resource : resources) {
+			// 继续往下看
 			count += loadBeanDefinitions(resource);
 		}
 		return count;
